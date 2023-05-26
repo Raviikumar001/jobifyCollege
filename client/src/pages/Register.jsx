@@ -1,51 +1,108 @@
+import React from "react";
 
-import { useState, useEffect } from "react"
-import {Logo} from '../components/Index';
-import Wrapper from "../assets/wrappers/RegisterPage";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Logo, FormRow, Alert} from "../components/Index";
+// import { useAppContext } from "../context/appContext";
+import Wrapper from '../assets/wrappers/RegisterPage'
 
 const initialState = {
-  name: '',
-  email: '',
-  password: '',
-  isMember:  true,
-}
-
+  name: "",
+  email: "",
+  password: "",
+  isMember: true,
+  
+};
 
 const Register = () => {
 
   const [values, setValues] = useState(initialState);
+  const navigate = useNavigate();
 
-  const handleChage = (e)=> {
-     console.log(e.target);
 
-  }
+  //global State
+
+     const {user,isLoading, showAlert, displayAlert, registerUser, loginUser} =useAppContext();
+  
+
+
+  const toggleMember = () => {
+    setValues({ ...values, isMember: !values.isMember });
+  };
+
+  const handleChange = (e) => {
+    setValues({...values, [e.target.name]: e.target.value}); 
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target);
-  }
+    const {name, email, password, isMember}= values;
+
+    if(!email || !password || (!isMember && !name))
+    {
+      displayAlert()
+      return
+    }
+    const currentUser = {name,email,password}
+    if(isMember){
+      loginUser(currentUser);
+    }else{
+      registerUser(currentUser);
+    }
+
+    // console.log(values)
+  };
+
+  useEffect( ()=>{
+      if(user){
+        setTimeout( ()=>{
+          navigate('/')
+
+        },3000)
+      }
+  }, [user,navigate])
 
 
   return (
     <Wrapper className="full-page">
-      <form  className="form" onSubmit={onSubmit}>
-      <Logo />
-      <h3>Login</h3>
-       <div className="form-row"> 
-       <label htmlFor="name" className="form-lable">
-       Name
+      <form className="form" onSubmit={onSubmit}>
+        <Logo />
+        <h3>{values.isMember ? "Login" : "Register"}</h3>
+        {showAlert && <Alert />}
+        {/* name input */}
+        {!values.isMember && (
+          <FormRow
+            type="text"
+            name="name"
+            value={values.name}
+            handleChange={handleChange}
+          />
+        )}
 
-       </label>
-       <input   type="text" value ={values.name} name="name"
+        {/* email */}
+        <FormRow
+          type="email"
+          name="email"
+          value={values.email}
+          handleChange={handleChange}
+        />
+        {/*password input */}
+        <FormRow
+          type="password"
+          name="password"
+          value={values.password}
+          handleChange={handleChange}
+        />
 
-        onChange={handleChage}
-        className="form-input"
-       />
-
-       </div>
-       <button type="submit" className="btn btn-block">
-          Submit
-       </button>
-
+        <button type="submit" className="btn btn-block" disabled={isLoading}>
+          Submit  
+        </button>
+        <p>
+          {values.isMember ? 'Not a memeber yet' : "Already a member?"}
+          <button type="button" className="member-btn" onClick={toggleMember}>
+            {values.isMember? 'Register' : 'Login'};  
+          </button>
+        </p>
       </form>
     </Wrapper>
   )
