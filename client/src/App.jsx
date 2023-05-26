@@ -2,6 +2,8 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
 
 import {Dashboard, Landing, Error, Register} from './pages/Index';
+
+
 function App() {
   
 

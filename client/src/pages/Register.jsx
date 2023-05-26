@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo, FormRow, Alert} from "../components/Index";
-// import { useAppContext } from "../context/appContext";
+import { useAppContext } from "../context/appContext";
 import Wrapper from '../assets/wrappers/RegisterPage'
 
 const initialState = {
