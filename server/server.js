@@ -1,13 +1,20 @@
 import express from "express"; 
 
+import notFoundMiddleware from "./middleware/not-found";
+
 
 const app = express();
 
 const port = process.env.PORT || 5000;
 
+
+
 app.get("/", (req, res) => {
     res.json({ msg: "Welcome!" });
   }); 
+
+
+  app.use(notFoundMiddleware);
 
   const start = async () => {
     try {
