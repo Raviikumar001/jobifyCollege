@@ -1,11 +1,14 @@
 import express from "express"; 
 
-import notFoundMiddleware from "./middleware/not-found";
+import dotenv from "dotenv";
 
+import connectDB from "./db/connect.js";
+import notFoundMiddleware from "./middleware/not-found.js";
+import errorHandlerMiddleware from './middleware/error-handler.js'
 
 const app = express();
+dotenv.config();
 
-const port = process.env.PORT || 5000;
 
 
 
@@ -15,6 +18,10 @@ app.get("/", (req, res) => {
 
 
   app.use(notFoundMiddleware);
+  app.use(errorHandlerMiddleware);
+
+  const port = process.env.PORT || 5000;
+  console.log(process.env.MONGO_URL)
 
   const start = async () => {
     try {
