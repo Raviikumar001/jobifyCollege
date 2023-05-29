@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 //db and authenticate user
+import "express-async-errors";
 
 import connectDB from "./db/connect.js";
 
