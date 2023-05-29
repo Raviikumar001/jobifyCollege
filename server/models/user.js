@@ -1,5 +1,5 @@
-import mongoose, { model } from "mongoose";
-
+import mongoose from "mongoose";
+import validator from "validator";
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -39,3 +39,5 @@ const UserSchema = new mongoose.Schema({
       default: "my city",
     },
   });
+
+  export default  mongoose.model('User', UserSchema)
