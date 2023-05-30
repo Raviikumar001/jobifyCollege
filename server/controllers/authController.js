@@ -1,25 +1,29 @@
-
-
 import User from "../models/user.js";
 import { StatusCodes } from "http-status-codes";
 
-const register = async(req,res)=> {
+import { BadRequestError } from "../errors/Index.js";
 
-        const user = await User.create(req.body);
-        res.status(StatusCodes.CREATED).json({ user});
-        
-    
-}
+const register = async (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    throw new BadRequestError("Please provide all values");
+  }
 
+  const userAlreadyExists = await User.findOne({ email });
+  if (userAlreadyExists) {
+    throw new BadRequestError("Email already in use");
+  }
 
+  const user = await User.create({ name, email, password });
+  res.status(StatusCodes.CREATED).json({ user });
+};
 
-const login = async(req,res)=>{
-    res.send("login user");
-}
+const login = async (req, res) => {
+  res.send("login user");
+};
 
-const updateUser = async(req,res)=> {
-    res.send('updateUser');
-}
+const updateUser = async (req, res) => {
+  res.send("updateUser");
+};
 
-export {register, login, updateUser};
-
+export { register, login, updateUser };
